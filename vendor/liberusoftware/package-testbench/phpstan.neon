@@ -1,0 +1,19 @@
+# Shared static-analysis configuration for every Liberu package.
+#
+# Deliberately declares neither `level` nor `paths`. The reusable
+# package-tests.yml workflow supplies both: the level is a per-package ratchet
+# it passes as an input, and the path is always the package's own src/. Baking
+# either in here would make one file decide something that is a property of the
+# repository running it.
+#
+# PHPStan resolves `includes` relative to this file, and this file is only ever
+# used from vendor/liberusoftware/package-testbench/. Composer flattens vendor/,
+# so the extensions sit two levels up from here.
+#
+# PHPStan has no optional-include syntax -- a `?` prefix is read as part of the
+# path, not as "include if present" -- so these must both resolve. They do,
+# because this package requires larastan/larastan, and orchestra/testbench pulls
+# in laravel/framework, which pulls in nesbot/carbon.
+includes:
+    - ../../larastan/larastan/extension.neon
+    - ../../nesbot/carbon/extension.neon
